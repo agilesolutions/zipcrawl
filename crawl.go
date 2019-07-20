@@ -38,7 +38,7 @@ func main() {
 
     fmt.Println(filename )
 
-	read, err := zip.OpenReader("test.zip")
+	read, err := zip.OpenReader(filename )
 	if err != nil {
 		msg := "Failed to open: %s"
 		log.Fatalf(msg, err)
