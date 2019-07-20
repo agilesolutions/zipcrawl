@@ -19,7 +19,10 @@ func main() {
     
     expression := os.Args[1]
 
-    fmt.Println("searching for zip files with names containing :", expression )
+    fmt.Println("searching for zip files with names containing : ", expression )
+    fmt.Println()
+    fmt.Println()
+    
 
  	// filepath.Walk
  	files, err := FilePathWalkDir("./")
@@ -28,7 +31,7 @@ func main() {
  	}
  	for _, file := range files{
   		if (strings.HasSuffix(file, "zip")) {
-	  		fmt.Println(file)
+	  		//fmt.Println(file)
 			read, err := zip.OpenReader(file )
 			if err != nil {
 				msg := "Failed to open: %s"
