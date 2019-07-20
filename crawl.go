@@ -28,6 +28,16 @@ func listFiles(file *zip.File) error {
 }
  
 func main() {
+
+    if len(os.Args) != 2 {
+        fmt.Println("Usage:", os.Args[0], "FILE")
+        return
+    }
+    
+    filename := os.Args[1]
+
+    fmt.Println(filename )
+
 	read, err := zip.OpenReader("test.zip")
 	if err != nil {
 		msg := "Failed to open: %s"
