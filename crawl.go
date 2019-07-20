@@ -39,20 +39,14 @@ func main() {
 			}
 			defer read.Close()
 
-			for _, file := range read.File {
-				if err := listFiles(file, expression); err != nil {
-				log.Fatalf("Failed to read %s from zip: %s", file.Name, err)
+			for _, infile := range read.File {
+				if err := listFiles(infile, file, expression); err != nil {
+				log.Fatalf("Failed to read %s from zip: %s", infile.Name, err)
 				}
 			}
 
   		}
  	}
-
-
-
-
-
-
 
 
 }
@@ -69,7 +63,7 @@ func FilePathWalkDir(root string) ([]string, error) {
 }
 
 
-func listFiles(file *zip.File, expression string) error {
+func listFiles(file *zip.File, filename string, expression string) error {
 	fileread, err := file.Open()
 	if err != nil {
 		msg := "Failed to open zip %s for reading: %s"
@@ -78,7 +72,7 @@ func listFiles(file *zip.File, expression string) error {
 	defer fileread.Close()
  
  	if (strings.Contains(file.Name, expression)) {
-		fmt.Fprintf(os.Stdout, "%s:", file.Name) 	
+		fmt.Fprintf(os.Stdout, "%s -> %s:", filename, file.Name) 	
 	    fmt.Println()
     }
 
