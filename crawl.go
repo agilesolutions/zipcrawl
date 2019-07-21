@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/user"
+	"io"
 	"path/filepath"
 	"strings"
 )
@@ -40,6 +42,8 @@ func main() {
 			defer read.Close()
 
 			for _, infile := range read.File {
+				
+			
 				if err := listFiles(infile, file, expression); err != nil {
 				log.Fatalf("Failed to read %s from zip: %s", infile.Name, err)
 				}
@@ -62,7 +66,7 @@ func FilePathWalkDir(root string) ([]string, error) {
  return files, err
 }
 
-
+// http://www.golangprograms.com/go-program-to-extracting-or-unzip-a-zip-format-file.html
 func listFiles(file *zip.File, filename string, expression string) error {
 	fileread, err := file.Open()
 	if err != nil {
@@ -72,8 +76,47 @@ func listFiles(file *zip.File, filename string, expression string) error {
 	defer fileread.Close()
  
  	if (strings.Contains(file.Name, expression)) {
+ 		// display zipfilename and contained file
 		fmt.Fprintf(os.Stdout, "%s -> %s:", filename, file.Name) 	
 	    fmt.Println()
+	    
+	    
+	    zippedFile, err := file.Open()
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer zippedFile.Close()
+
+  		myself, error := user.Current()
+   		if error != nil {
+     		panic(error)
+   		}
+   		homedir := myself.HomeDir
+   		desktop := homedir+"/Desktop/" + file.Name
+   		
+		fmt.Fprintf(os.Stdout, "**** file extracted to -> %s:", desktop)
+	    fmt.Println()
+		
+		
+		outputFile, err := os.OpenFile(
+				desktop,
+				os.O_WRONLY|os.O_CREATE|os.O_TRUNC,
+				file.Mode(),
+			)
+			if err != nil {
+				log.Fatal("*** error opening file ",err)
+			}
+	    
+		defer outputFile.Close()
+
+		fmt.Fprintf(os.Stdout, "**** file opened -> %s:", desktop)
+	    fmt.Println()
+
+ 
+		_, err = io.Copy(outputFile, zippedFile)
+		if err != nil {
+			log.Fatal(err)
+		}
     }
 
  
