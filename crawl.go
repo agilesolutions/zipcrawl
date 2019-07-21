@@ -1,6 +1,7 @@
 package main
  
 import (
+	"encoding/json"
 	"archive/zip"
 	"fmt"
 	"log"
@@ -18,12 +19,29 @@ func main() {
         fmt.Println("Usage:", os.Args[0], "token")
         return
     }
-    
+
     expression := os.Args[1]
 
     fmt.Println("searching for zip files with names containing : ", expression )
     fmt.Println()
     fmt.Println()
+
+	// https://stackoverflow.com/questions/16465705/how-to-handle-configuration-in-go
+	type Configuration struct {
+	    copyto    string
+	}
+	file, _ := os.Open("config.json")
+	defer file.Close()
+	decoder := json.NewDecoder(file)
+	configuration := Configuration{}
+	err := decoder.Decode(&configuration)
+	if err != nil {
+  		fmt.Println("error reading config file : ", err)
+	}
+	fmt.Fprintf(os.Stdout, "writing PDF files to  -> %s:", configuration.copyto) 	
+	fmt.Println()
+
+    
     
 
  	// filepath.Walk
@@ -99,6 +117,7 @@ func listFiles(file *zip.File, filename string, expression string) error {
 		
 		
 		outputFile, err := os.OpenFile(
+		
 				desktop,
 				os.O_WRONLY|os.O_CREATE|os.O_TRUNC,
 				file.Mode(),
