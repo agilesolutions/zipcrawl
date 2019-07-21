@@ -24,13 +24,18 @@ func main() {
 
     fmt.Println("searching for zip files with names containing : ", expression )
     fmt.Println()
-    fmt.Println()
 
 	// https://stackoverflow.com/questions/16465705/how-to-handle-configuration-in-go
 	type Configuration struct {
-	    copyto    string
+	    copyfrom    string
+	    copyto		string
 	}
-	file, _ := os.Open("config.json")
+	
+	dir, _ := os.Getwd()
+	fmt.Println(dir)
+
+	file, _ := os.Open(dir +  "\\config.json")
+	
 	defer file.Close()
 	decoder := json.NewDecoder(file)
 	configuration := Configuration{}
@@ -38,6 +43,9 @@ func main() {
 	if err != nil {
   		fmt.Println("error reading config file : ", err)
 	}
+	fmt.Println(configuration.copyfrom)
+	fmt.Fprintf(os.Stdout, "reading PDF files from  -> %s:", configuration) 	
+	fmt.Println()
 	fmt.Fprintf(os.Stdout, "writing PDF files to  -> %s:", configuration.copyto) 	
 	fmt.Println()
 

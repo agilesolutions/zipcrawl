@@ -1,3 +1,4 @@
 {
-    "copyto": "C:/mycopies"
+    "copyfrom": "C:/from",
+    "copyto": "C:/to"
 }
