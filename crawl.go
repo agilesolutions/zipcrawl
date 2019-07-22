@@ -52,7 +52,7 @@ func main() {
     
 
  	// filepath.Walk
- 	files, err := FilePathWalkDir("./")
+ 	files, err := FilePathWalkDir(configuration.Copyfrom)
  	if err != nil {
   	panic(err)
  	}
@@ -69,7 +69,7 @@ func main() {
 			for _, infile := range read.File {
 				
 			
-				if err := listFiles(infile, file, expression); err != nil {
+				if err := listFiles(infile, file, expression, configuration.Copyto); err != nil {
 				log.Fatalf("Failed to read %s from zip: %s", infile.Name, err)
 				}
 			}
@@ -92,7 +92,7 @@ func FilePathWalkDir(root string) ([]string, error) {
 }
 
 // http://www.golangprograms.com/go-program-to-extracting-or-unzip-a-zip-format-file.html
-func listFiles(file *zip.File, filename string, expression string) error {
+func listFiles(file *zip.File, filename string, expression string, location string) error {
 	fileread, err := file.Open()
 	if err != nil {
 		msg := "Failed to open zip %s for reading: %s"
@@ -117,7 +117,7 @@ func listFiles(file *zip.File, filename string, expression string) error {
      		panic(error)
    		}
    		homedir := myself.HomeDir
-   		desktop := homedir+"/Desktop/" + file.Name
+   		desktop := location +"/" + file.Name
    		
 		fmt.Fprintf(os.Stdout, "**** file extracted to -> %s:", desktop)
 	    fmt.Println()
