@@ -27,8 +27,8 @@ func main() {
 
 	// https://stackoverflow.com/questions/16465705/how-to-handle-configuration-in-go
 	type Configuration struct {
-	    copyfrom    string
-	    copyto		string
+	    Copyfrom    string
+	    Copyto		string
 	}
 	
 	dir, _ := os.Getwd()
@@ -43,10 +43,9 @@ func main() {
 	if err != nil {
   		fmt.Println("error reading config file : ", err)
 	}
-	fmt.Println(configuration.copyfrom)
-	fmt.Fprintf(os.Stdout, "reading PDF files from  -> %s:", configuration) 	
+	fmt.Fprintf(os.Stdout, "reading PDF files from  -> %s:", configuration.Copyfrom) 	
 	fmt.Println()
-	fmt.Fprintf(os.Stdout, "writing PDF files to  -> %s:", configuration.copyto) 	
+	fmt.Fprintf(os.Stdout, "writing PDF files to  -> %s:", configuration.Copyto) 	
 	fmt.Println()
 
     
