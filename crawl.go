@@ -46,6 +46,8 @@ func main() {
 	fmt.Println()
 	fmt.Fprintf(os.Stdout, "writing PDF files to  -> %s:", configuration.Copyto) 	
 	fmt.Println()
+	fmt.Println()
+	
 
     
     
@@ -68,7 +70,7 @@ func main() {
 			for _, infile := range read.File {
 				
 			
-				if err := listFiles(infile, file, expression, configuration.Copyto, configuration.Copyto); err != nil {
+				if err := listFiles(infile, file, expression, configuration.Copyto); err != nil {
 				log.Fatalf("Failed to read %s from zip: %s", infile.Name, err)
 				}
 			}
@@ -101,7 +103,7 @@ func listFiles(file *zip.File, filename string, expression string, location stri
  
  	if (strings.Contains(file.Name, expression)) {
  		// display zipfilename and contained file
-		fmt.Fprintf(os.Stdout, "%s -> %s:", filename, file.Name) 	
+		fmt.Fprintf(os.Stdout, "File extracted from %s : copied to -> %s/%s:", filename, location, file.Name) 	
 	    fmt.Println()
 	    
 	    
@@ -113,8 +115,6 @@ func listFiles(file *zip.File, filename string, expression string, location stri
 
    		desktop := location +"/" + file.Name
    		
-		fmt.Fprintf(os.Stdout, "**** file extracted to -> %s:", desktop)
-	    fmt.Println()
 		
 		
 		outputFile, err := os.OpenFile(
@@ -129,8 +129,6 @@ func listFiles(file *zip.File, filename string, expression string, location stri
 	    
 		defer outputFile.Close()
 
-		fmt.Fprintf(os.Stdout, "**** file opened -> %s:", desktop)
-	    fmt.Println()
 
  
 		_, err = io.Copy(outputFile, zippedFile)
