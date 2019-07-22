@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/user"
 	"io"
 	"path/filepath"
 	"strings"
@@ -69,7 +68,7 @@ func main() {
 			for _, infile := range read.File {
 				
 			
-				if err := listFiles(infile, file, expression, configuration.Copyto); err != nil {
+				if err := listFiles(infile, file, expression, configuration.Copyto, configuration.Copyto); err != nil {
 				log.Fatalf("Failed to read %s from zip: %s", infile.Name, err)
 				}
 			}
@@ -112,11 +111,6 @@ func listFiles(file *zip.File, filename string, expression string, location stri
 		}
 		defer zippedFile.Close()
 
-  		myself, error := user.Current()
-   		if error != nil {
-     		panic(error)
-   		}
-   		homedir := myself.HomeDir
    		desktop := location +"/" + file.Name
    		
 		fmt.Fprintf(os.Stdout, "**** file extracted to -> %s:", desktop)
